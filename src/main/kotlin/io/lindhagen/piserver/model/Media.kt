@@ -9,13 +9,8 @@ import javax.persistence.*
 @Entity
 @Table(name = "media")
 data class Media(
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        var id: Long = -1,
         var title: String,
         var subtitle: String?,
         var description: String?,
-        var type: String = "movie"
-) {
-        constructor() : this(-1, "", "", "")
-}
+        var type: String
+): AbstractEntity()
