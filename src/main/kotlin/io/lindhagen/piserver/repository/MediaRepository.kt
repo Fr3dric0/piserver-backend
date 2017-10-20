@@ -9,6 +9,7 @@ import org.springframework.data.repository.CrudRepository
  */
 interface MediaRepository: CrudRepository<Media, Long> {
 
-    fun findByTitle(title: String): Media
+    fun findByTitle(title: String): Media?
+    fun findByTitleContaining(title: String): List<Media?>
     fun findByType(type: String): Iterable<Media>
 }
