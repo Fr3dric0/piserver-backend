@@ -19,6 +19,8 @@ data class Episode(
         @Value("NOW")
         val createdOn: LocalDateTime,
 
+        var url: String?,
+
         @ManyToOne
         @JoinColumn(name = "season_id")
         var season: Season

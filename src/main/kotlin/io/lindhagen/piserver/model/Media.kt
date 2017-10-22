@@ -24,7 +24,9 @@ data class Media(
         val thumbnail: String?,
 
         // Used only when type is movie
-        val url: String?,
+        var url: String?,
+
+        val rating: String?,
 
         // Cover image
         val cover: String?,
