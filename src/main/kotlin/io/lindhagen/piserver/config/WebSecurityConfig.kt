@@ -55,7 +55,8 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .antMatchers(HttpMethod.POST, "/api/v1/users/").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth/token/").permitAll()
 
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
+//                .anyRequest().authenticated()
 //                .anyRequest().hasRole("USER")
                 .and()
                 .addFilterBefore(JWTAuthenticationFilter(),
