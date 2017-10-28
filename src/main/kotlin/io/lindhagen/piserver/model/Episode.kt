@@ -16,6 +16,8 @@ data class Episode(
         var thumbnail: String?,
         var cover: String?,
 
+        var released: LocalDateTime?,
+
         @Column(name = "created_on", columnDefinition = "TIMESTAMP", updatable = false, insertable = false)
         @Value("NOW")
         val createdOn: LocalDateTime,

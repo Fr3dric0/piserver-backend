@@ -23,7 +23,14 @@ class Media {
     fun create(@RequestBody media: Media): Media = repo.save(media.validate())
 
     @GetMapping("")
-    fun list() = repo.findAll()
+    fun list(@RequestParam(required = false) type: String?): Iterable<Media> {
+
+        if (type.isNullOrEmpty()) {
+            return repo.findAll()
+        }
+
+        return repo.findByType(type!!)
+    }
 
     @GetMapping("{id}")
     fun retrieve(@PathVariable(name="id") id: Long) = repo.findOne(id)
