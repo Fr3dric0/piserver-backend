@@ -1,6 +1,8 @@
 package io.lindhagen.piserver.model
 
 import io.lindhagen.piserver.exception.BadRequestException
+import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.persistence.*
 
 /**
@@ -26,10 +28,12 @@ data class Media(
         // Used only when type is movie
         var url: String?,
 
-        val rating: String?,
+        val rating: Float?,
 
         // Cover image
         val cover: String?,
+
+        var released: LocalDateTime?,
 
         @OneToMany(mappedBy = "media", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.EAGER)
         val seasons: List<Season>
