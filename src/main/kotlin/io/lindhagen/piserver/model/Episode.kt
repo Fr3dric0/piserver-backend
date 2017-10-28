@@ -11,6 +11,7 @@ import javax.persistence.*
 @Entity
 data class Episode(
         val episode: Int = 1,
+        var title: String?,
         var description: String?,
         var thumbnail: String?,
         var cover: String?,
