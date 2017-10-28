@@ -18,7 +18,7 @@ import java.util.*
  * @created:    22.10.2017
  */
 @RestController
-@RequestMapping("/api/v1/files")
+@RequestMapping("/api/v1/files/")
 class MediaFiles {
 
     val RESOURCE_FOLDER = "resources/media";
@@ -30,7 +30,7 @@ class MediaFiles {
     @Autowired
     lateinit var episodeRepo: EpisodeRepository
 
-    @PostMapping("")
+    @PostMapping("video/")
     fun uploadVideo(@RequestParam(name = "id", required = true) id: Long,
                     @RequestParam(name = "episodeId", required = false) episodeId: Long?,
                     @RequestBody file: MultipartFile): Media {
