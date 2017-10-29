@@ -1,8 +1,11 @@
 package io.lindhagen.piserver.controller
 
 import io.lindhagen.piserver.exception.BadRequestException
+import io.lindhagen.piserver.exception.NotFoundException
 import io.lindhagen.piserver.model.Media
+import io.lindhagen.piserver.model.Season
 import io.lindhagen.piserver.repository.MediaRepository
+import io.lindhagen.piserver.repository.SeasonRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -17,6 +20,9 @@ class Media {
 
     @Autowired
     lateinit var repo: MediaRepository
+
+    @Autowired
+    lateinit var seasonRepo: SeasonRepository
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
@@ -33,7 +39,22 @@ class Media {
     }
 
     @GetMapping("{id}")
-    fun retrieve(@PathVariable(name="id") id: Long) = repo.findOne(id)
+    fun retrieve(@PathVariable(name="id") id: Long): Media {
+        var media: Media? = repo.findOne(id) ?:
+                throw NotFoundException("Could not find media with id: $id")
+
+        if (media!!.isTvShow()) {
+            var s = mutableListOf<Season>()
+
+            seasonRepo
+                    .findByMediaId(media.id)
+                    .forEach { it -> s.add(it) }
+
+            media.seasons = s
+        }
+
+        return media
+    }
 
     @GetMapping("/search")
     fun search(@RequestParam(name = "query") query: String?): List<Media?> =

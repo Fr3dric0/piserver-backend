@@ -1,5 +1,6 @@
 package io.lindhagen.piserver.repository
 
+import io.lindhagen.piserver.model.Media
 import io.lindhagen.piserver.model.Season
 import org.springframework.data.repository.CrudRepository
 
@@ -9,4 +10,5 @@ import org.springframework.data.repository.CrudRepository
  */
 interface SeasonRepository : CrudRepository<Season, Long>{
 
+    fun findByMediaId(mediaId: Long): Iterable<Season>
 }

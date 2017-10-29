@@ -36,7 +36,7 @@ data class Media(
         var released: LocalDateTime?,
 
         @OneToMany(mappedBy = "media", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.EAGER)
-        val seasons: List<Season>
+        var seasons: List<Season>
 ): AbstractEntity() {
 
 
