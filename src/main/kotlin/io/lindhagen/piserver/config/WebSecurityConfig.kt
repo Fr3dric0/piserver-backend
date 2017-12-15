@@ -1,8 +1,7 @@
 package io.lindhagen.piserver.config
 
 import io.lindhagen.piserver.security.JWTAuthenticationFilter
-import io.lindhagen.piserver.security.JWTLoginFilter
-import io.lindhagen.piserver.security.UserService
+import io.lindhagen.piserver.security.JWTAuthorizationFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -14,7 +13,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
@@ -30,13 +29,10 @@ import org.springframework.security.crypto.password.PasswordEncoder
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Autowired
-    lateinit var userService: UserService
+    lateinit var userDetailsService: UserDetailsService
 
     @Autowired
-    fun configureAuthentication(auth: AuthenticationManagerBuilder) {
-        auth.userDetailsService(userService)
-                .passwordEncoder(passwordEncoder())
-    }
+    lateinit var bcrypt: BCryptPasswordEncoder;
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {
@@ -55,17 +51,12 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .antMatchers(HttpMethod.POST, "/api/v1/users/").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth/token/").permitAll()
 
-                .anyRequest().permitAll()
-//                .anyRequest().authenticated()
+                .anyRequest().authenticated()
 //                .anyRequest().hasRole("USER")
                 .and()
-                .addFilterBefore(JWTAuthenticationFilter(),
-                        UsernamePasswordAuthenticationFilter::class.java
-                )
-                .addFilterBefore(
-                        JWTLoginFilter("/api/v1/auth/token/", authenticationManager()),
-                        UsernamePasswordAuthenticationFilter::class.java
-                )
+
+                .addFilter(JWTAuthenticationFilter(authenticationManager()))
+                .addFilter(JWTAuthorizationFilter(authenticationManager()))
     }
 
     override fun configure(web: WebSecurity) {
@@ -73,6 +64,8 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
+        auth.userDetailsService(userDetailsService).passwordEncoder(bcrypt)
+
         auth.inMemoryAuthentication()
                 .withUser("admin")
                 .password("password")

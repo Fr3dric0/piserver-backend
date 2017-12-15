@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
+import kotlin.jvm.Transient
 
 /**
  * @author:     Fredrik F. Lindhagen <fred.lindh96@gmail.com>
@@ -15,33 +16,31 @@ data class User(
         val name: String?,
 
         @Column(nullable = false, unique = true)
-        @Email
-        val email: String,
+        val username: String,
 
         @Column(nullable = false)
-        internal val password: String,
+        var password: String,
 
-        @ManyToOne
-        @JoinColumn(name = "role_id")
-        val role: Role
+        @Transient
+        var confirmPassword: String?
+//
+//        @ManyToOne
+//        @JoinColumn(name = "role_id")
+//        val role: Role
 
-): UserDetails, AbstractEntity() {
+): AbstractEntity() {
 
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return mutableListOf<GrantedAuthority>(
-                SimpleGrantedAuthority(role.name)
-        )
-    }
+//    fun getAuthorities(): MutableCollection<out GrantedAuthority> {
+//        return mutableListOf<GrantedAuthority>(
+//                SimpleGrantedAuthority(role.name)
+//        )
+//    }
 
-    override fun isEnabled() = true
+    fun isEnabled() = true
 
-    override fun getUsername(): String = email
+    fun isCredentialsNonExpired() = true
 
-    override fun isCredentialsNonExpired() = true
+    fun isAccountNonExpired() = true
 
-    override fun getPassword(): String = password
-
-    override fun isAccountNonExpired() = true
-
-    override fun isAccountNonLocked() = true
+    fun isAccountNonLocked() = true
 }
