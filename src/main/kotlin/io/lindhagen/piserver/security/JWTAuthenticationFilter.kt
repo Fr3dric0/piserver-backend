@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletResponse
 class JWTAuthenticationFilter : UsernamePasswordAuthenticationFilter {
 
     constructor(authenticationManager: AuthenticationManager) : super() {
-    this.authenticationManager = authenticationManager
-    setFilterProcessesUrl("/api/v1/token/")
+        this.authenticationManager = authenticationManager
+        setFilterProcessesUrl("/api/v1/auth/token/")
     }
 
     /**
@@ -32,22 +32,22 @@ class JWTAuthenticationFilter : UsernamePasswordAuthenticationFilter {
      * @throws AuthenticationException
      * */
     override fun attemptAuthentication(
-    req: HttpServletRequest,
-    res: HttpServletResponse): Authentication {
+        req: HttpServletRequest,
+        res: HttpServletResponse): Authentication {
 
-    try {
-    val creds: User = ObjectMapper() // Map post-body to User model
-    .readValue(req.inputStream, User::class.java)
+        try {
+            val creds: User = ObjectMapper() // Map post-body to User model
+                .readValue(req.inputStream, User::class.java)
 
-    return authenticationManager.authenticate(
-    UsernamePasswordAuthenticationToken(
-    creds.username,
-    creds.password,
-    arrayListOf()
-    ))
-    } catch (e: IOException) {
-    throw RuntimeException(e)
-    }
+            return authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken(
+                    creds.username,
+                    creds.password,
+                    arrayListOf()
+                ))
+        } catch (e: IOException) {
+            throw RuntimeException(e)
+        }
     }
 
 
@@ -56,19 +56,19 @@ class JWTAuthenticationFilter : UsernamePasswordAuthenticationFilter {
      *
      * */
     override fun successfulAuthentication(
-    req: HttpServletRequest,
-    res: HttpServletResponse,
-    chain: FilterChain,
-    auth: Authentication) {
+        req: HttpServletRequest,
+        res: HttpServletResponse,
+        chain: FilterChain,
+        auth: Authentication) {
 
-    val user = auth.principal as org.springframework.security.core.userdetails.User
+        val user = auth.principal as org.springframework.security.core.userdetails.User
 
-    val token: String = Jwts.builder()
-    .setSubject(user.username)
-    .setExpiration(Date(System.currentTimeMillis() + 860000))
-    .signWith(SignatureAlgorithm.HS512, "sdfsdsds")
-    .compact()
+        val token: String = Jwts.builder()
+            .setSubject(user.username)
+            .setExpiration(Date(System.currentTimeMillis() + 860000))
+            .signWith(SignatureAlgorithm.HS512, "sdfsdsds")
+            .compact()
 
-    res.addHeader("Authorization", "Bearer $token")
+        res.addHeader("Authorization", "Bearer $token")
     }
-    }
+}

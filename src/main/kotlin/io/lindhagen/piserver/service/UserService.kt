@@ -31,7 +31,7 @@ class UserService {
      * @author Fredrik F. Lindhagen <fred.lindh96@gmail.com>
      * @throws no.ibok.server.exception.NotFoundException
      * */
-    fun findUserByUsernameOrThrowNotFound(username: String) =
+    fun findByUsernameOrThrowNotFound(username: String) =
         repository.findByUsername(username) ?:
             throw NotFoundException("Cannot find user with username `$username`")
 

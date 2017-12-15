@@ -1,12 +1,11 @@
 package io.lindhagen.piserver.controller
 
 import io.lindhagen.piserver.model.User
-import io.lindhagen.piserver.repository.UserRepository
+import io.lindhagen.piserver.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.*
+import java.security.Principal
 
 /**
  * @author:     Fredrik F. Lindhagen <fred.lindh96@gmail.com>
@@ -17,11 +16,19 @@ import org.springframework.web.bind.annotation.RestController
 class UserController {
 
     @Autowired
-    lateinit var repo: UserRepository
+    lateinit var userService: UserService
+
+    @GetMapping("")
+    fun retrieve(principal: Principal) = userService
+        .findByUsernameOrThrowNotFound(principal.name)
+        .apply { password = "" }
 
     @PostMapping("")
-    fun register(@RequestBody user: User): User {
-
-        return repo.save(user)
-    }
+    @ResponseStatus(HttpStatus.CREATED)
+    fun register(@RequestBody user: User) = userService
+        .create(user)
+        .apply {
+            password = ""
+            confirmPassword = null
+        }
 }
