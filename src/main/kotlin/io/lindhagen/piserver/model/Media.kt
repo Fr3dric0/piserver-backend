@@ -28,7 +28,7 @@ data class Media(
         // Used only when type is movie
         var url: String?,
 
-        val rating: Float?,
+        var rating: Float?,
 
         // Cover image
         val cover: String?,
@@ -41,21 +41,4 @@ data class Media(
 
 
     fun isTvShow() = this.type == "tv-show"
-
-    /**
-     * Handles Basic validation of models
-     * @throws BadRequestException
-     * */
-    fun validate (): Media {
-        val validTypes = listOf("movie", "tv-show")
-
-        this.title ?: throw BadRequestException("Missing required field `title`")
-        val type = this.type ?: throw BadRequestException("Missing required field `type`")
-
-        if (!validTypes.contains(type)) {
-            throw BadRequestException("Invalid value $type in `type`, legal values [${validTypes.joinToString(", ")}]")
-        }
-
-        return this
-    }
 }

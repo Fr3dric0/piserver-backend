@@ -19,8 +19,6 @@ class UserControllerIntegrationTest: AbstractControllerIntegrationTest<User>() {
 
     override fun getBaseUri() = "/api/v1/users/"
 
-    val log: Logger = LoggerFactory.getLogger(this.javaClass)
-
     @Before
     fun setUp() {
         validUser = User(
