@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*
  */
 @RestController
 @RequestMapping("/api/v1/media/")
-class Media {
+class MediaController {
 
     @Autowired
     lateinit var repo: MediaRepository

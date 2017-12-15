@@ -19,7 +19,7 @@ import java.util.*
  */
 @RestController
 @RequestMapping("/api/v1/files/")
-class MediaFiles {
+class MediaFileController {
 
     val RESOURCE_FOLDER = "resources/media";
     val VALID_TYPES = mapOf("video/mp4" to "mp4")
