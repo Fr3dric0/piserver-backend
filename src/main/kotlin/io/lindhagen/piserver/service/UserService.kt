@@ -29,7 +29,7 @@ class UserService {
      * and gives HTTP 404 if not found
      *
      * @author Fredrik F. Lindhagen <fred.lindh96@gmail.com>
-     * @throws no.ibok.server.exception.NotFoundException
+     * @throws io.lindhagen.piserver.exception.NotFoundException
      * */
     fun findByUsernameOrThrowNotFound(username: String) =
         repository.findByUsername(username) ?:
@@ -41,7 +41,7 @@ class UserService {
      * @author Fredrik F. Lindhagen <fred.lindh96@gmail.com>
      * @param user The user instance to save in the database
      * @param skipPasswordCheck Password can be null if authenticated through Third party
-     * @throws no.ibok.server.exception.BadRequestException
+     * @throws io.lindhagen.piserver.exception.BadRequestException
      * */
     fun create(user: User, skipPasswordCheck: Boolean = false): User {
         validateUser(user, requireConfirmPassword = true)
@@ -57,8 +57,8 @@ class UserService {
      *
      * @author Fredrik F. Lindhagen <fred.lindh96@gmail.com>
      * @param user User to update
-     * @throws  no.ibok.server.exception.BadRequestException,
-     *          no.ibok.server.exception.NotFoundException
+     * @throws  io.lindhagen.piserver.exception.BadRequestException,
+     *          io.lindhagen.piserver.exception.NotFoundException
      * */
     fun update(user: User): User {
         // If changes has been made to the password fields (i.e. they are not empty)
@@ -112,7 +112,7 @@ class UserService {
     /**
      * Checks if user with identical username already exists,
      * and throws exception (HTTP 400) if found.
-     * @throws no.ibok.server.exception.BadRequestException
+     * @throws io.lindhagen.piserver.exception.BadRequestException
      * */
     private fun requireNoDuplicateUser(user: User) {
         if (repository.existsByUsername(user.username!!)) {
@@ -122,7 +122,7 @@ class UserService {
 
     /**
      * Complains if user doesn't exist in database
-     * @throws no.ibok.server.exception.NotFoundException
+     * @throws io.lindhagen.piserver.exception.NotFoundException
      * */
     private fun requireUserExists(user: User) {
         if (!repository.existsByUsername(user.username!!)) {

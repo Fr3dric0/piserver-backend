@@ -22,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder
  * @author:     Fredrik F. Lindhagen <fred.lindh96@gmail.com>
  * @created:    18.10.2017
  */
-@SuppressWarnings("SpringJavaAutowiringInspection")
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)

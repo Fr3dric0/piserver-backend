@@ -1,9 +1,5 @@
 package io.lindhagen.piserver.model
 
-import org.hibernate.validator.constraints.Email
-import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
 import kotlin.jvm.Transient
 
@@ -13,10 +9,10 @@ import kotlin.jvm.Transient
  */
 @Entity
 data class User(
-        val name: String?,
+        var name: String?,
 
         @Column(nullable = false, unique = true)
-        val username: String,
+        var username: String,
 
         @Column(nullable = false)
         var password: String,
@@ -28,19 +24,4 @@ data class User(
 //        @JoinColumn(name = "role_id")
 //        val role: Role
 
-): AbstractEntity() {
-
-//    fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-//        return mutableListOf<GrantedAuthority>(
-//                SimpleGrantedAuthority(role.name)
-//        )
-//    }
-
-    fun isEnabled() = true
-
-    fun isCredentialsNonExpired() = true
-
-    fun isAccountNonExpired() = true
-
-    fun isAccountNonLocked() = true
-}
+): AbstractEntity()
